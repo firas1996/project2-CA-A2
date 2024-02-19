@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Navigation.module.css";
+import "./Navigation.css";
 
 const Navigation = (props) => {
   return (

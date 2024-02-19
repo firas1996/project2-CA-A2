@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Card from "../UI/Card/Card";
-import "./Login.css";
+import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
 
 const Login = (props) => {
@@ -41,7 +41,7 @@ const Login = (props) => {
   };
 
   return (
-    <Card className="login">
+    <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <div
           className={`${classes.control} ${
@@ -58,7 +58,7 @@ const Login = (props) => {
           />
         </div>
         <div
-          className={`"control" ${
+          className={`${classes.control} ${
             passwordIsValid === false ? classes.invalid : ""
           }`}
         >
@@ -71,7 +71,7 @@ const Login = (props) => {
             onBlur={validatePasswordHandler}
           />
         </div>
-        <div className="actions">
+        <div className={classes.actions}>
           <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
           </Button>
