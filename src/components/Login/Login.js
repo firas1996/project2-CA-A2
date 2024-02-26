@@ -9,7 +9,16 @@ const emailReducer = (state, action) => {
     return { value: action.payload, isValid: action.payload.includes("@") };
   }
   if (action.type == "USER_NZEL_EL_BARRA") {
-    return { value: state.value, isValid: action.payload.includes("@") };
+    return { value: state.value, isValid: state.value.includes("@") };
+  }
+  return { value: "", isValid: null };
+};
+const passwordReducer = (state, action) => {
+  if (action.type == "USER_KTEB_EMAIL") {
+    return { value: action.payload, isValid: action.payload.trim().length > 6 };
+  }
+  if (action.type == "USER_NZEL_EL_BARRA") {
+    return { value: state.value, isValid: state.value.trim().length > 6 };
   }
   return { value: "", isValid: null };
 };
@@ -17,42 +26,46 @@ const emailReducer = (state, action) => {
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  // const [enteredPassword, setEnteredPassword] = useState("");
+  // const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
   const [email, dispatchEmail] = useReducer(emailReducer, {
     value: "",
     isValid: null,
   });
+  const [password, dispatchPassword] = useReducer(passwordReducer, {
+    value: "",
+    isValid: null,
+  });
   // """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  // useEffect(() => {
-  //   const t = setTimeout(() => {
-  //     setFormIsValid(
-  //       enteredEmail.includes("@") && enteredPassword.trim().length > 6
-  //     );
-  //     console.log("Effect");
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(t);
-  //     console.log("clean Up");
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+  const { isValid: emailIsValid } = email;
+  const { isValid: passwordIsValid } = password;
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setFormIsValid(emailIsValid && passwordIsValid);
+      console.log("Effect");
+    }, 500);
+    return () => {
+      clearTimeout(t);
+      console.log("clean Up");
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   // """"""""""""""""""""""""""""""""""""""""""""""
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
     dispatchEmail({ type: "USER_KTEB_EMAIL", payload: event.target.value });
-    setFormIsValid(
-      event.target.value.includes("@") && enteredPassword.trim().length > 6
-    );
+    // setFormIsValid(
+    //   event.target.value.includes("@") && password.value.trim().length > 6
+    // );
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && email.value.includes("@")
-    );
+    // setEnteredPassword(event.target.value);
+    dispatchPassword({ type: "USER_KTEB_EMAIL", payload: event.target.value });
+    // setFormIsValid(
+    //   event.target.value.trim().length > 6 && email.value.includes("@")
+    // );
   };
 
   const validateEmailHandler = () => {
@@ -61,12 +74,13 @@ const Login = (props) => {
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    // setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: "USER_NZEL_EL_BARRA" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(email.value, enteredPassword);
+    props.onLogin(email.value, password.value);
   };
 
   return (
@@ -88,14 +102,14 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ""
+            password.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={password.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
