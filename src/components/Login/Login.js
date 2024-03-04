@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import { AuthStore } from "../../store/auth-context";
 
 const emailReducer = (state, action) => {
   if (action.type == "USER_KTEB_EMAIL") {
@@ -23,7 +24,8 @@ const passwordReducer = (state, action) => {
   return { value: "", isValid: null };
 };
 
-const Login = (props) => {
+const Login = () => {
+  const AuthCtx = useContext(AuthStore);
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState("");
@@ -80,7 +82,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(email.value, password.value);
+    AuthCtx.onLogin(email.value, password.value);
   };
 
   return (

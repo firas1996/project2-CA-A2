@@ -1,28 +1,35 @@
 import React from "react";
 
 import "./Navigation.css";
+import { AuthStore } from "../../store/auth-context";
 
-const Navigation = (props) => {
+const Navigation = () => {
   return (
-    <nav className="nav">
-      <ul>
-        {props.isLoggedIn && (
-          <li>
-            <a href="/">Users</a>
-          </li>
-        )}
-        {props.isLoggedIn && (
-          <li>
-            <a href="/">Admin</a>
-          </li>
-        )}
-        {props.isLoggedIn && (
-          <li>
-            <button onClick={props.onLogout}>Logout</button>
-          </li>
-        )}
-      </ul>
-    </nav>
+    <AuthStore.Consumer>
+      {(AuthStr) => {
+        return (
+          <nav className="nav">
+            <ul>
+              {AuthStr.isLoggedIn && (
+                <li>
+                  <a href="/">Users</a>
+                </li>
+              )}
+              {AuthStr.isLoggedIn && (
+                <li>
+                  <a href="/">Admin</a>
+                </li>
+              )}
+              {AuthStr.isLoggedIn && (
+                <li>
+                  <button onClick={AuthStr.onLogout}>Logout</button>
+                </li>
+              )}
+            </ul>
+          </nav>
+        );
+      }}
+    </AuthStore.Consumer>
   );
 };
 
