@@ -7,7 +7,7 @@ export const AuthStore = createContext({
   onLogout: () => {},
 });
 
-const AuthProvider = () => {
+const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("isLoggedIn");
@@ -32,7 +32,9 @@ const AuthProvider = () => {
         onLogin: loginHandler,
         onLogout: logoutHandler,
       }}
-    ></AuthStore.Provider>
+    >
+      {children}
+    </AuthStore.Provider>
   );
 };
 
